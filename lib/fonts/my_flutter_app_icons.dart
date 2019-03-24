@@ -24,6 +24,8 @@ class MyFlutterApp {
   static const IconData birthday_cake = const IconData(0xe801, fontFamily: _kFontFam);
   static const IconData foot_print = const IconData(0xe802, fontFamily: _kFontFam);
   static const IconData sneaker = const IconData(0xe803, fontFamily: _kFontFam);
+  static const IconData hojas_de_pasto_en_silueta = const IconData(0xe804, fontFamily: _kFontFam);
   static const IconData scale = const IconData(0xe805, fontFamily: _kFontFam);
+  static const IconData termometro = const IconData(0xe806, fontFamily: _kFontFam);
   static const IconData height = const IconData(0xe807, fontFamily: _kFontFam);
 }

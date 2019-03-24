@@ -48,7 +48,6 @@ class ScreenLandingState extends State<ScreenLanding>
         onPressed: () => showSessionDialog(),
         child: Icon(Icons.event),
       ),
-//      floatingActionButton: multiFAB(),
     );
   }
 
@@ -112,13 +111,85 @@ class ScreenLandingState extends State<ScreenLanding>
   Widget getSessionView(Session session) {
     return Column(
       children: <Widget>[
-        Text(session.name),
-        Text(session.fieldType),
-        Text(session.shoeType),
-        Text(session.weather),
-        Text(session.timeOfDay),
-        Text(session.sensorType),
-        Text('${session.numberOfPlayers}'),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Flexible(
+                flex: 4,
+                child: Text(
+                  session.name,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                ),
+              ),
+              Flexible(
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Text('${session.numberOfPlayers}',
+                          style: TextStyle(fontSize: 18.0)),
+                    ),
+                    Icon(Icons.group)
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(MyFlutterApp.termometro),
+                  ),
+                  Text(Utils.capitalLetter(session.weather)),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(Icons.brightness_4),
+                  ),
+                  Text(Utils.capitalLetter(session.timeOfDay)),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(MyFlutterApp.hojas_de_pasto_en_silueta),
+                  ),
+                  Text(Utils.capitalLetter(session.fieldType)),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(MyFlutterApp.sneaker),
+                  ),
+                  Text(Utils.capitalLetter(session.shoeType)),
+                ],
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -216,9 +287,14 @@ class ScreenLandingState extends State<ScreenLanding>
   String _shoe = '';
   List<String> _shoes = <String>[
     '',
-    '1',
-    '2',
-    '3',
+    'Running',
+    'Trail Running',
+    'Minimalist',
+    'Walking',
+    'Cross',
+    'Basketball',
+    'Soccer',
+    'Lacrosse',
   ];
 
   String _timeOfDay = '';
@@ -270,7 +346,7 @@ class ScreenLandingState extends State<ScreenLanding>
             TextFormField(
               onSaved: (val) => session.name = val,
               decoration: const InputDecoration(
-                icon: const Icon(Icons.person),
+                icon: const Icon(Icons.event),
                 hintText: 'Session name',
                 labelText: 'Session name',
               ),
@@ -279,7 +355,7 @@ class ScreenLandingState extends State<ScreenLanding>
               builder: (FormFieldState state) {
                 return InputDecorator(
                   decoration: InputDecoration(
-                    icon: const Icon(Icons.person),
+                    icon: const Icon(MyFlutterApp.hojas_de_pasto_en_silueta),
                     labelText: 'Field',
                   ),
                   isEmpty: _field == '',
@@ -309,7 +385,7 @@ class ScreenLandingState extends State<ScreenLanding>
               builder: (FormFieldState state) {
                 return InputDecorator(
                   decoration: InputDecoration(
-                    icon: const Icon(Icons.person),
+                    icon: const Icon(MyFlutterApp.sneaker),
                     labelText: 'Shoes',
                   ),
                   isEmpty: _shoe == '',
@@ -339,7 +415,7 @@ class ScreenLandingState extends State<ScreenLanding>
               builder: (FormFieldState state) {
                 return InputDecorator(
                   decoration: InputDecoration(
-                    icon: const Icon(Icons.person),
+                    icon: const Icon(MyFlutterApp.termometro),
                     labelText: 'Weather',
                   ),
                   isEmpty: _weather == '',
@@ -369,7 +445,7 @@ class ScreenLandingState extends State<ScreenLanding>
               builder: (FormFieldState state) {
                 return InputDecorator(
                   decoration: InputDecoration(
-                    icon: const Icon(Icons.person),
+                    icon: const Icon(Icons.brightness_4),
                     labelText: 'Time of day',
                   ),
                   isEmpty: _timeOfDay == '',
@@ -396,19 +472,11 @@ class ScreenLandingState extends State<ScreenLanding>
               },
             ),
             TextFormField(
-              onSaved: (val) => session.sensorType = val,
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.person),
-                hintText: 'Sensor name',
-                labelText: 'Sensor',
-              ),
-            ),
-            TextFormField(
               keyboardType: TextInputType.multiline,
               maxLines: 3,
               onSaved: (val) => session.description = val,
               decoration: const InputDecoration(
-                icon: const Icon(Icons.person),
+                icon: const Icon(Icons.chat),
                 hintText: 'Description (optional)',
                 labelText: 'Description',
               ),
@@ -424,6 +492,7 @@ class ScreenLandingState extends State<ScreenLanding>
     if (form.validate()) {
       form.save();
       session.date = DateTime.now();
+      session.sensorType = 'None';
       print(session.toString());
       Database().createSession(session).then((onValue) {
         session = Session.empty();
